@@ -2,15 +2,21 @@ import cv2 as cv
 
 
 def main():
-    #type of image processing
+    # type of image processing
     # 0 for original image
     # 1 for opencv techniques to make image look like a cartoon
     # 2 for canny edge detection to sort out edges (currently buggy as it filters out background a lot of the time)
     processingType = 1
 
+    # picks every nth image to be saved to images folder
+    n = 10
+
+
     source = "VIDEO_NAME_HERE.mp4"
 
     cap = cv.VideoCapture(source)
+
+    counter = 0
 
     while True:
         ret, frame = cap.read()
@@ -24,9 +30,15 @@ def main():
             print("Pick a processing type between 0 and 2")
             break
 
-        cv.imshow('frame', frame)
-        if cv.waitKey(25) & 0xFF == ord('q'):
+        # cv.imshow('frame', frame)
+        if counter % n == 0:
+            cv.imwrite('images/image' + str(int(counter / n)) + '.jpg', frame)
+
+        counter += 1
+
+        if cv.waitKey(1) & 0xFF == ord('q'):
             break
+
 
     cap.release()
     cv.destroyAllWindows()
